@@ -21,3 +21,13 @@ type UserSvc interface {
 	GetUser(opts GetUserOpts, ctx context.Context) (*User, error)
 	CreateUser(opts CreateUser) error
 }
+
+type CreateMeetingOpts struct {
+	Title     string
+	Detail    string
+	CreatedBy uuid.UUID
+}
+type MeetingSvc interface {
+	Create(opts CreateMeetingOpts) error
+	List(opts GetMeetingOpts, ctx context.Context) ([]Meeting, error)
+}

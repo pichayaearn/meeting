@@ -4,6 +4,7 @@ import (
 	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation"
+	validator "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/google/uuid"
 )
@@ -33,4 +34,33 @@ func UserFactory(opts UserFactoryOpts) (*User, error) {
 	}
 
 	return &user, nil
+}
+
+type MeetingFactoryOpts struct {
+	ID        uuid.UUID
+	Title     string
+	Detail    string
+	Status    string
+	CreatedAt time.Time
+	CreatedBy uuid.UUID
+	UpdatedAt time.Time
+	DeletedAt time.Time
+}
+
+func MeetingFactory(opts MeetingFactoryOpts) (*Meeting, error) {
+	meeting := Meeting{
+		id:            opts.ID,
+		title:         opts.Title,
+		detail:        opts.Detail,
+		status:        MeetingStatus(opts.Status),
+		createdAt:     opts.CreatedAt,
+		createdByUUID: opts.CreatedBy,
+		updatedAt:     opts.UpdatedAt,
+	}
+
+	if err := meeting.Validate(validator.Field(&meeting.id, validator.Required)); err != nil {
+		return nil, err
+	}
+
+	return &meeting, nil
 }

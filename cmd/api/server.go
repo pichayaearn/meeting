@@ -5,6 +5,8 @@ import (
 	"github.com/pichayaearn/meeting/cmd/api/config"
 	authRoute "github.com/pichayaearn/meeting/pkg/auth/route"
 	authSvc "github.com/pichayaearn/meeting/pkg/auth/svc"
+	"github.com/pichayaearn/meeting/pkg/middleware"
+	"github.com/pichayaearn/meeting/pkg/route"
 
 	"github.com/pichayaearn/meeting/pkg/repo"
 	"github.com/pichayaearn/meeting/pkg/svc"
@@ -24,14 +26,23 @@ func newServer(cfg *config.Config) *echo.Echo {
 	e := echo.New()
 
 	userRepo := repo.NewUserRepo(db)
+	meetingRepo := repo.NewMeetingRepo(db)
 
 	userSvc := svc.NewUserSvc(svc.NewUserSvcCfgs{
 		UserRepo: userRepo,
+	})
+	meetingSvc := svc.NewMeetingSvc(svc.NewMeetingSvcCfg{
+		MeetingRepo: meetingRepo,
+		UserRepo:    userRepo,
 	})
 	authSvc := authSvc.NewAuthSvc(authSvc.NewAuthSvcCfg{
 		UserSvc:   userSvc,
 		SecretKey: cfg.SecretKey,
 	})
+
+	mw := middleware.Authenticate{
+		Secret: cfg.SecretKey,
+	}
 
 	e.POST("/sign-up", authRoute.CreateUser(authRoute.CreateUserCfg{
 		UserSvc: userSvc,
@@ -40,6 +51,14 @@ func newServer(cfg *config.Config) *echo.Echo {
 	e.POST("/login", authRoute.Login(authRoute.LoginCfg{
 		AuthSvc: authSvc,
 	}))
+
+	e.POST("/meeting", route.CreateMeeting(route.CreateMeetingCfg{
+		MeetingSvc: meetingSvc,
+	}), mw.Authenticate)
+
+	e.GET("/meetings", route.GetListMeeting(route.GetListMeetingCfg{
+		MeetingSvc: meetingSvc,
+	}), mw.Authenticate)
 
 	return e
 
