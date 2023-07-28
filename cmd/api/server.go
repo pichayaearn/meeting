@@ -69,6 +69,10 @@ func newServer(cfg *config.Config) *echo.Echo {
 		CommentSvc: commentSvc,
 	}), mw.Authenticate)
 
+	e.POST("/comment", route.CreateComment(route.CreateCommentCfg{
+		CommentSvc: commentSvc,
+	}), mw.Authenticate)
+
 	return e
 
 }

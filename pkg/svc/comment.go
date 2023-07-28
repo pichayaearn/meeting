@@ -59,3 +59,27 @@ func (csvc CommentSvc) List(opts model.GetListCommentOpts, ctx context.Context) 
 
 	return resp, nil
 }
+
+func (csvc CommentSvc) Create(opts model.CreateCommentOpts) error {
+	meetingComment, commentDeatil, err := model.NewComment(opts)
+	if err != nil {
+		return err
+	}
+
+	//create comment detail
+	cd, err := csvc.commentRepo.CreateCommentDetail(*commentDeatil)
+	if err != nil {
+		return err
+	}
+	if err := meetingComment.SetCommentID(cd.ID()); err != nil {
+		return err
+	}
+
+	//create comment meeting
+	if err := csvc.commentRepo.CreateCommentMeeting(*meetingComment); err != nil {
+		return err
+	}
+
+	return nil
+
+}

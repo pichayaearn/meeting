@@ -14,6 +14,20 @@ type CommentSvc struct {
 	mock.Mock
 }
 
+// Create provides a mock function with given fields: opts
+func (_m *CommentSvc) Create(opts model.CreateCommentOpts) error {
+	ret := _m.Called(opts)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.CreateCommentOpts) error); ok {
+		r0 = rf(opts)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // List provides a mock function with given fields: opts, ctx
 func (_m *CommentSvc) List(opts model.GetListCommentOpts, ctx context.Context) ([]model.Comment, error) {
 	ret := _m.Called(opts, ctx)

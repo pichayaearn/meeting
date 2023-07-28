@@ -4,6 +4,7 @@ import (
 	"time"
 
 	validator "github.com/go-ozzo/ozzo-validation"
+	"github.com/go-ozzo/ozzo-validation/is"
 	"github.com/google/uuid"
 )
 
@@ -36,9 +37,6 @@ func (mc MeetingComment) UpdatedAt() time.Time   { return mc.updatedAt }
 
 func (mc *MeetingComment) Validate(additionalRules ...*validator.FieldRules) error {
 	rules := []*validator.FieldRules{
-		validator.Field(&mc.id, validator.Required),
-		validator.Field(&mc.meetingID, validator.Required),
-		validator.Field(&mc.commentID, validator.Required),
 		validator.Field(&mc.status, validator.Required, validator.In(StatusCommentActive, StatusCommentUnActive)),
 		validator.Field(&mc.createdAt, validator.Required),
 		validator.Field(&mc.createdByID, validator.Required),
@@ -58,6 +56,13 @@ func (mc *MeetingComment) Validate(additionalRules ...*validator.FieldRules) err
 func (mc *MeetingComment) SetCreatedBy(email string) error {
 	mc.createdByEmail = email
 	if err := mc.Validate(validator.Field(&mc.createdByEmail, validator.Required)); err != nil {
+		return err
+	}
+	return nil
+}
+func (mc *MeetingComment) SetCommentID(commentID uuid.UUID) error {
+	mc.commentID = commentID
+	if err := mc.Validate(validator.Field(&mc.commentID, validator.Required, is.UUIDv4)); err != nil {
 		return err
 	}
 	return nil
@@ -85,15 +90,28 @@ func (cd *CommentDetail) Validate(additionalRules ...*validator.FieldRules) erro
 	return nil
 }
 
-// type Comment struct {
-// 	ID            uuid.UUID
-// 	Status        StatusComment
-// 	Detail        string
-// 	CreatedByID   uuid.UUID
-// 	CretedByEmail string
-// 	CreatedAt     time.Time
-// 	UpdatedAt     time.Time
-// }
+func NewComment(opts CreateCommentOpts) (*MeetingComment, *CommentDetail, error) {
+	commentDetail := CommentDetail{
+		detail: opts.Detail,
+	}
+	if err := commentDetail.Validate(); err != nil {
+		return nil, nil, err
+	}
+
+	now := time.Now()
+	meetingComment := MeetingComment{
+		meetingID:   opts.MeetingID,
+		status:      StatusCommentActive,
+		createdByID: opts.CreatedBy,
+		createdAt:   now,
+		updatedAt:   now,
+	}
+	if err := meetingComment.Validate(); err != nil {
+		return nil, nil, err
+	}
+
+	return &meetingComment, &commentDetail, nil
+}
 
 type Comment struct {
 	MeetingComment

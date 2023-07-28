@@ -33,4 +33,6 @@ type GetListCommentOpts struct {
 type CommentRepo interface {
 	ListCommentID(opts GetListCommentOpts, ctx context.Context) ([]MeetingComment, error)
 	CommentDetail(id uuid.UUID, ctx context.Context) (*CommentDetail, error)
+	CreateCommentDetail(comment CommentDetail) (*CommentDetail, error)
+	CreateCommentMeeting(meetingComment MeetingComment) error
 }

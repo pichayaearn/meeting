@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -55,7 +54,6 @@ func (cr CommentRepo) ListCommentID(opts model.GetListCommentOpts, ctx context.C
 		}
 		return nil, errors.New("get list meeting comment error")
 	}
-	log.Printf("meeting comment %+v", meetingComments)
 
 	resp := []model.MeetingComment{}
 	for _, v := range meetingComments {
@@ -70,6 +68,16 @@ func (cr CommentRepo) ListCommentID(opts model.GetListCommentOpts, ctx context.C
 
 }
 
+func (cr CommentRepo) CreateCommentMeeting(meetingComment model.MeetingComment) error {
+	mb := toMeetingCommentBun(meetingComment)
+	if _, err := cr.db.NewInsert().Model(&mb).Exec(context.Background()); err != nil {
+		return errors.New("create comment detail failed")
+	}
+
+	return nil
+
+}
+
 func (cr CommentRepo) CommentDetail(id uuid.UUID, ctx context.Context) (*model.CommentDetail, error) {
 	comment := commentBun{}
 	q := cr.db.NewSelect().Model(&comment)
@@ -80,6 +88,15 @@ func (cr CommentRepo) CommentDetail(id uuid.UUID, ctx context.Context) (*model.C
 		return nil, errors.New("get comment detail error")
 	}
 	return comment.toModel()
+}
+
+func (cr CommentRepo) CreateCommentDetail(comment model.CommentDetail) (*model.CommentDetail, error) {
+	cb := toCommentBun(comment)
+	if _, err := cr.db.NewInsert().Model(&cb).Exec(context.Background()); err != nil {
+		return nil, errors.New("create comment detail failed")
+	}
+
+	return cb.toModel()
 }
 
 func addCommentFilter(opts model.GetListCommentOpts) func(q bun.QueryBuilder) bun.QueryBuilder {
@@ -112,4 +129,23 @@ func (mc commentBun) toModel() (*model.CommentDetail, error) {
 		ID:     mc.ID,
 		Detail: mc.Detail,
 	})
+}
+
+func toCommentBun(comment model.CommentDetail) commentBun {
+	return commentBun{
+		ID:     comment.ID(),
+		Detail: comment.Detail(),
+	}
+}
+
+func toMeetingCommentBun(meetingComment model.MeetingComment) meetingCommentBun {
+	return meetingCommentBun{
+		ID:        meetingComment.ID(),
+		MeetingID: meetingComment.MeetingID(),
+		CommentID: meetingComment.CommentID(),
+		Status:    string(meetingComment.Status()),
+		CreatedAt: meetingComment.CreatedAt(),
+		CreatedBy: meetingComment.CreatedByID(),
+		UpdatedAt: meetingComment.UpdatedAt(),
+	}
 }

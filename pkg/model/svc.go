@@ -32,6 +32,12 @@ type MeetingSvc interface {
 	List(opts GetMeetingOpts, ctx context.Context) ([]Meeting, error)
 }
 
+type CreateCommentOpts struct {
+	MeetingID uuid.UUID
+	Detail    string
+	CreatedBy uuid.UUID
+}
 type CommentSvc interface {
 	List(opts GetListCommentOpts, ctx context.Context) ([]Comment, error)
+	Create(opts CreateCommentOpts) error
 }

@@ -85,7 +85,13 @@ func MeetingCommentFactory(opts MeetingCommentFactoryOpts) (*MeetingComment, err
 		createdAt:   opts.CreatedAt,
 		updatedAt:   opts.UpdatedAt,
 	}
-	if err := meetingComment.Validate(); err != nil {
+	rules := []*validator.FieldRules{
+		validator.Field(&meetingComment.id, validator.Required, is.UUIDv4),
+		validator.Field(&meetingComment.meetingID, validator.Required, is.UUIDv4),
+		validator.Field(&meetingComment.commentID, validator.Required, is.UUIDv4),
+	}
+
+	if err := meetingComment.Validate(rules...); err != nil {
 		return nil, err
 	}
 
