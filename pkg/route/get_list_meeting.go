@@ -55,10 +55,6 @@ func GetListMeeting(cfg GetListMeetingCfg) echo.HandlerFunc {
 			return echo.NewHTTPError(http.StatusBadRequest, "Get list meeting: "+err.Error())
 		}
 
-		if len(meetings) <= 0 {
-			return echo.NewHTTPError(http.StatusNotFound, "meeting not found")
-		}
-
 		resp := []serializer.GetListMeetingResponse{}
 
 		for _, v := range meetings {

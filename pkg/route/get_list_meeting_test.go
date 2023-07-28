@@ -44,15 +44,6 @@ func TestGetListMeeting(t *testing.T) {
 			isError: true,
 		},
 		{
-			name:      "failed, meeting not found",
-			parameter: serializer.GetListMeetingReq{},
-			mockSvc: func(m *mocks.MeetingSvc) {
-				m.On("List", mock.IsType(model.GetMeetingOpts{}), context.Background()).Return(nil, nil)
-			},
-
-			isError: true,
-		},
-		{
 			name:      "success",
 			parameter: serializer.GetListMeetingReq{},
 			mockSvc: func(m *mocks.MeetingSvc) {
