@@ -27,12 +27,17 @@ func newServer(cfg *config.Config) *echo.Echo {
 
 	userRepo := repo.NewUserRepo(db)
 	meetingRepo := repo.NewMeetingRepo(db)
+	commentRepo := repo.NewCommentRepo(db)
 
 	userSvc := svc.NewUserSvc(svc.NewUserSvcCfgs{
 		UserRepo: userRepo,
 	})
 	meetingSvc := svc.NewMeetingSvc(svc.NewMeetingSvcCfg{
 		MeetingRepo: meetingRepo,
+		UserRepo:    userRepo,
+	})
+	commentSvc := svc.NewCommentSvc(svc.NewCommentSvcCfg{
+		CommentRepo: commentRepo,
 		UserRepo:    userRepo,
 	})
 	authSvc := authSvc.NewAuthSvc(authSvc.NewAuthSvcCfg{
@@ -58,6 +63,10 @@ func newServer(cfg *config.Config) *echo.Echo {
 
 	e.GET("/meetings", route.GetListMeeting(route.GetListMeetingCfg{
 		MeetingSvc: meetingSvc,
+	}), mw.Authenticate)
+
+	e.GET("/comments", route.GetListComment(route.GetListCommentCfg{
+		CommentSvc: commentSvc,
 	}), mw.Authenticate)
 
 	return e

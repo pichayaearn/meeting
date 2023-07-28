@@ -64,3 +64,48 @@ func MeetingFactory(opts MeetingFactoryOpts) (*Meeting, error) {
 
 	return &meeting, nil
 }
+
+type MeetingCommentFactoryOpts struct {
+	ID        uuid.UUID
+	MeetingID uuid.UUID
+	CommentID uuid.UUID
+	Status    string
+	CreatedAt time.Time
+	CreatedBy uuid.UUID
+	UpdatedAt time.Time
+}
+
+func MeetingCommentFactory(opts MeetingCommentFactoryOpts) (*MeetingComment, error) {
+	meetingComment := MeetingComment{
+		id:          opts.ID,
+		meetingID:   opts.MeetingID,
+		commentID:   opts.CommentID,
+		status:      StatusComment(opts.Status),
+		createdByID: opts.CreatedBy,
+		createdAt:   opts.CreatedAt,
+		updatedAt:   opts.UpdatedAt,
+	}
+	if err := meetingComment.Validate(); err != nil {
+		return nil, err
+	}
+
+	return &meetingComment, nil
+}
+
+type CommentDetailFactoryOpts struct {
+	ID     uuid.UUID
+	Detail string
+}
+
+func CommentDetailFactory(opts CommentDetailFactoryOpts) (*CommentDetail, error) {
+	comment := CommentDetail{
+		id:     opts.ID,
+		detail: opts.Detail,
+	}
+
+	if err := comment.Validate(validator.Field(&comment.id, validator.Required)); err != nil {
+		return nil, err
+	}
+
+	return &comment, nil
+}

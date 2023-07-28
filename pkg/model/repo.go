@@ -24,3 +24,13 @@ type MeetingRepo interface {
 	List(opts GetMeetingOpts, ctx context.Context) ([]Meeting, error)
 	Create(meeting Meeting) error
 }
+
+type GetListCommentOpts struct {
+	MeetingID uuid.UUID
+	Limit     int
+	Offset    int
+}
+type CommentRepo interface {
+	ListCommentID(opts GetListCommentOpts, ctx context.Context) ([]MeetingComment, error)
+	CommentDetail(id uuid.UUID, ctx context.Context) (*CommentDetail, error)
+}

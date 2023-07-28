@@ -1,6 +1,6 @@
 CREATE SCHEMA meeting;
 
-CREATE TYPE "public"."status" AS ENUM ('to_do', 'in_progress', 'done', 'canceled');
+CREATE TYPE "public"."status" AS ENUM ('to_do', 'in_progress', 'done', 'canceled', 'active', 'unactive');
 
 
 CREATE TABLE "meeting".meetings (

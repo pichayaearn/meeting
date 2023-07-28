@@ -48,16 +48,14 @@ func (mr MeetingRepo) Get(opts model.GetMeetingOpts, ctx context.Context) (*mode
 func (mr MeetingRepo) List(opts model.GetMeetingOpts, ctx context.Context) ([]model.Meeting, error) {
 	meetings := []meetingBun{}
 	q := mr.db.NewSelect().Model(&meetings)
-	limit := 0
-	offset := 0
 
 	if opts.Limit > 0 {
-		limit = opts.Limit
+		q.Limit(opts.Limit)
 	}
 	if opts.Offset > 0 {
-		offset = opts.Offset
+		q.Offset(opts.Offset)
 	}
-	if err := q.OrderExpr("id DESC").ApplyQueryBuilder(addMeetingFilter(opts)).Limit(limit).Offset(offset).Scan(ctx); err != nil {
+	if err := q.OrderExpr("created_at DESC").ApplyQueryBuilder(addMeetingFilter(opts)).Scan(ctx); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, nil
 		}

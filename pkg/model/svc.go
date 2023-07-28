@@ -31,3 +31,7 @@ type MeetingSvc interface {
 	Create(opts CreateMeetingOpts) error
 	List(opts GetMeetingOpts, ctx context.Context) ([]Meeting, error)
 }
+
+type CommentSvc interface {
+	List(opts GetListCommentOpts, ctx context.Context) ([]Comment, error)
+}

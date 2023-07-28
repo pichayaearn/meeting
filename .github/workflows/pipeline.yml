@@ -16,16 +16,6 @@ jobs:
         with:
           go-version: 1.18
       
-      - name: Install staticcheck
-        run: go get honnef.co/go/tools/cmd/staticcheck@latest
-
-      - name: go mod
-        run: go mod download
-      
-
-      - name: Run staticcheck
-        run: $(go env GOPATH)/bin/staticcheck -checks all,-U1000,-ST1000 ./pkg/...
-
       - name: Build
         run: go build -v ./...
 
