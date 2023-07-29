@@ -21,6 +21,8 @@ services:
 
   my_app_service:
     image: app
+    ports:
+      - 3000:1323
     env_file:
       - ./cmd/api/.env
 
