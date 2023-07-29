@@ -2,6 +2,7 @@ package svc
 
 import (
 	"context"
+	"errors"
 	"log"
 
 	"github.com/pichayaearn/meeting/pkg/model"
@@ -62,5 +63,30 @@ func (msvc MeetingSvc) List(opts model.GetMeetingOpts, ctx context.Context) ([]m
 	}
 
 	return meetings, nil
+
+}
+
+func (msvc MeetingSvc) Update(opts model.UpdateMeetingOpts) error {
+	//find meeting
+	meeting, err := msvc.meetingRepo.Get(model.GetMeetingOpts{
+		ID: opts.MeetingID,
+	}, context.Background())
+	if err != nil {
+		return err
+	}
+
+	if meeting == nil {
+		return errors.New("meeting not found")
+	}
+
+	if err := meeting.SetStatus(opts.Status); err != nil {
+		return err
+	}
+
+	if err := msvc.meetingRepo.Update(*meeting); err != nil {
+		return err
+	}
+
+	return nil
 
 }

@@ -62,6 +62,12 @@ func (m *Meeting) SetCreatedBy(user User) error {
 	return m.Validate()
 }
 
+func (m *Meeting) SetStatus(status string) error {
+	m.status = MeetingStatus(status)
+	m.updatedAt = time.Now()
+	return m.Validate()
+}
+
 func NewMeeting(opts CreateMeetingOpts) (*Meeting, error) {
 	now := time.Now()
 	meeting := Meeting{

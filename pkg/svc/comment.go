@@ -2,6 +2,7 @@ package svc
 
 import (
 	"context"
+	"errors"
 
 	"github.com/pichayaearn/meeting/pkg/model"
 )
@@ -9,22 +10,37 @@ import (
 type CommentSvc struct {
 	commentRepo model.CommentRepo
 	userRepo    model.UserRepo
+	meetingRepo model.MeetingRepo
 }
 
 type NewCommentSvcCfg struct {
 	CommentRepo model.CommentRepo
 	UserRepo    model.UserRepo
+	MeetingRepo model.MeetingRepo
 }
 
 func NewCommentSvc(cfg NewCommentSvcCfg) model.CommentSvc {
 	return &CommentSvc{
 		commentRepo: cfg.CommentRepo,
 		userRepo:    cfg.UserRepo,
+		meetingRepo: cfg.MeetingRepo,
 	}
 }
 
 func (csvc CommentSvc) List(opts model.GetListCommentOpts, ctx context.Context) ([]model.Comment, error) {
 	resp := []model.Comment{}
+	//find meeting is found
+	meeting, err := csvc.meetingRepo.Get(model.GetMeetingOpts{
+		ID: opts.MeetingID,
+	}, ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if meeting == nil {
+		return nil, errors.New("meeting not found")
+	}
+
 	listMeetingComment, err := csvc.commentRepo.ListCommentID(opts, ctx)
 	if err != nil {
 		return nil, err

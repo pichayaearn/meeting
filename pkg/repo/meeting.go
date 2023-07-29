@@ -74,6 +74,17 @@ func (mr MeetingRepo) List(opts model.GetMeetingOpts, ctx context.Context) ([]mo
 	return resp, nil
 }
 
+func (mr MeetingRepo) Update(meeting model.Meeting) error {
+	meetingBun := toMeetingBun(meeting)
+	if _, err := mr.db.NewUpdate().
+		Model(&meetingBun).
+		WherePK().
+		Exec(context.Background()); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (mr MeetingRepo) Create(meeting model.Meeting) error {
 	mb := toMeetingBun(meeting)
 	if _, err := mr.db.NewInsert().Model(&mb).Exec(context.Background()); err != nil {
@@ -93,6 +104,8 @@ func addMeetingFilter(opts model.GetMeetingOpts) func(q bun.QueryBuilder) bun.Qu
 		if opts.Status != "" {
 			q.Where("status = ?", opts.Status)
 		}
+
+		q.Where("status != ?", model.MeetingStatusCanceled)
 
 		return q
 

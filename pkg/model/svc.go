@@ -27,9 +27,15 @@ type CreateMeetingOpts struct {
 	Detail    string
 	CreatedBy uuid.UUID
 }
+
+type UpdateMeetingOpts struct {
+	MeetingID uuid.UUID
+	Status    string
+}
 type MeetingSvc interface {
 	Create(opts CreateMeetingOpts) error
 	List(opts GetMeetingOpts, ctx context.Context) ([]Meeting, error)
+	Update(opts UpdateMeetingOpts) error
 }
 
 type CreateCommentOpts struct {

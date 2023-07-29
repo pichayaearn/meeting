@@ -23,6 +23,7 @@ type MeetingRepo interface {
 	Get(opts GetMeetingOpts, ctx context.Context) (*Meeting, error)
 	List(opts GetMeetingOpts, ctx context.Context) ([]Meeting, error)
 	Create(meeting Meeting) error
+	Update(meeting Meeting) error
 }
 
 type GetListCommentOpts struct {

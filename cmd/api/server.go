@@ -39,6 +39,7 @@ func newServer(cfg *config.Config) *echo.Echo {
 	commentSvc := svc.NewCommentSvc(svc.NewCommentSvcCfg{
 		CommentRepo: commentRepo,
 		UserRepo:    userRepo,
+		MeetingRepo: meetingRepo,
 	})
 	authSvc := authSvc.NewAuthSvc(authSvc.NewAuthSvcCfg{
 		UserSvc:   userSvc,
@@ -71,6 +72,10 @@ func newServer(cfg *config.Config) *echo.Echo {
 
 	e.POST("/comment", route.CreateComment(route.CreateCommentCfg{
 		CommentSvc: commentSvc,
+	}), mw.Authenticate)
+
+	e.PATCH("/meeting", route.UpdateStatusMeeting(route.UpdateStatusMeetingCfg{
+		MeetingSvc: meetingSvc,
 	}), mw.Authenticate)
 
 	return e

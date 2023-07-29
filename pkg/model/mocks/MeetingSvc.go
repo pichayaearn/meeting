@@ -54,6 +54,20 @@ func (_m *MeetingSvc) List(opts model.GetMeetingOpts, ctx context.Context) ([]mo
 	return r0, r1
 }
 
+// Update provides a mock function with given fields: opts
+func (_m *MeetingSvc) Update(opts model.UpdateMeetingOpts) error {
+	ret := _m.Called(opts)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.UpdateMeetingOpts) error); ok {
+		r0 = rf(opts)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // NewMeetingSvc creates a new instance of MeetingSvc. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
 // The first argument is typically a *testing.T value.
 func NewMeetingSvc(t interface {
