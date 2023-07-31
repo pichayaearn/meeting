@@ -1,0 +1,257 @@
+{
+	"info": {
+		"_postman_id": "349907fd-3d4e-4062-836d-404977a016dc",
+		"name": "meeting",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17752959"
+	},
+	"item": [
+		{
+			"name": "sign-up",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"test4@gmail.com\",\n    \"password\": \"1234\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/sign-up",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n   \"email\": \"test3@gmail.com\",\n    \"password\": \"1234\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create meeting",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI5ZDM4ZWE1OC0zMzNhLTQzZWUtYTBjYS1iNmY5ZmE0MjAzYTYiLCJleHAiOjE2OTA1NTg4MTF9.45D5E6-vAJoAixE3K7vzJ2txRkwlSIMI_NVeLDhs1VU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Appointment2\",\n    \"detail\": \"Appointment with someone\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/meeting",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"meeting"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get list meetings",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI5ZDM4ZWE1OC0zMzNhLTQzZWUtYTBjYS1iNmY5ZmE0MjAzYTYiLCJleHAiOjE2OTA1NTg4MTF9.45D5E6-vAJoAixE3K7vzJ2txRkwlSIMI_NVeLDhs1VU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/meetings",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"meetings"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "no",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "donep",
+							"disabled": true
+						},
+						{
+							"key": "limit",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "offset",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "created_by",
+							"value": "9d38ea58-333a-43ee-a0ca-b6f9fa4203a6",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get list comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI1NDZkZmZlYi00ZDkxLTRlY2ItOWMxOS00OWQ2NjZjNWFiMjciLCJleHAiOjE2OTA2MjU0OTF9.rZGhcJ5ZQMtvayAPGrdQh3k9pNHOPm9ejfDWZzgGXz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/comments?meeting_id=a73bae08-a106-47fc-a3ee-f58736d3bd7a",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "meeting_id",
+							"value": "a73bae08-a106-47fc-a3ee-f58736d3bd7a"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create comment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI1NDZkZmZlYi00ZDkxLTRlY2ItOWMxOS00OWQ2NjZjNWFiMjciLCJleHAiOjE2OTA2MjU0OTF9.rZGhcJ5ZQMtvayAPGrdQh3k9pNHOPm9ejfDWZzgGXz4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"detail\": \"comment via postman\",\n    \"meeting_id\": \"a73bae08-a106-47fc-a3ee-f58736d3bd7a\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/comment",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"comment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update meeting",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiI1NDZkZmZlYi00ZDkxLTRlY2ItOWMxOS00OWQ2NjZjNWFiMjciLCJleHAiOjE2OTA3MjEzMDl9.qZWI4wh2LSltm10J-nYG3if6CfeO-8hs36NbkohfqhQ",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"meeting_id\": \"a73bae08-a106-47fc-a3ee-f58736d3bd7a\",\n    \"status\": \"canceled\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/meeting",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"meeting"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
